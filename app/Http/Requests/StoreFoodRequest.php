@@ -11,18 +11,20 @@ class StoreFoodRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('waiter');
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'name'         => 'required|string|max:255',
+            'category'     => 'required|in:food,drink',
+            'price'        => 'required|numeric|min:0',
+            'description'  => 'nullable|string',
+            'image_url'    => $this->image 
+                            ? Storage::disk('public')->url($this->image) 
+                            : asset('images/default-food.png'),
+            'is_available' => 'boolean',
         ];
     }
 }

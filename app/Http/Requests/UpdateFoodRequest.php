@@ -11,7 +11,7 @@ class UpdateFoodRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('waiter');
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateFoodRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'sometimes|string|max:255',
+            'category' => 'sometimes|in:food,drink',
+            'price' => 'sometimes|numeric|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'is_available' => 'sometimes|boolean',
         ];
     }
 }
