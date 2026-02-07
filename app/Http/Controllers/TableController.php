@@ -3,48 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
-use App\Http\Requests\StoreTableRequest;
-use App\Http\Requests\UpdateTableRequest;
+use App\Services\TableService;
+use App\Http\Resources\TableResource;
+use Illuminate\Http\Request;
 
 class TableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+        protected TableService $tableService
+    ) {}
+
     public function index()
     {
-        //
+        $tables = $this->tableService->getAllTables();
+        return TableResource::collection($tables);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTableRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
+    
     public function show(Table $table)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTableRequest $request, Table $table)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Table $table)
-    {
-        //
+        return new TableResource($table);
     }
 }

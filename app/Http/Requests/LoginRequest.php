@@ -19,10 +19,13 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function toArray(Request $request): array
     {
         return [
-            //
+            'id'    => $this->id,
+            'name'  => $this->name,
+            'email' => $this->email,
+            'role'  => $this->getRoleNames()->first(),
         ];
     }
 }

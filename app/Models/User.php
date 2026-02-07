@@ -18,6 +18,7 @@ class User extends Authenticatable
      * Use guarded = [] to allow mass assignment for all fields 
      * during development (Pro shortcut).
      */
+    protected $guard_name = 'api';
     protected $guarded = [];
 
     protected $hidden = [

@@ -24,4 +24,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/tables', [TableController::class, 'index']);
+    Route::get('/tables/{table}', [TableController::class, 'show']);
 });
