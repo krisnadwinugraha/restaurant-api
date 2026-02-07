@@ -12,6 +12,11 @@ class OrderItem extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'subtotal' => 'decimal:2',
+    ];
+    
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

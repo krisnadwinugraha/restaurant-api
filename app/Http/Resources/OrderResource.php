@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
             'total_amount' => (float) $this->total_amount,
             'opened_at' => $this->opened_at,
             'closed_at' => $this->closed_at,
+            'closed_by' => new UserResource($this->whenLoaded('closedBy')),
             
             'table' => new TableResource($this->whenLoaded('table')),
             'waiter' => new UserResource($this->whenLoaded('waiter')),

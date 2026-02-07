@@ -11,7 +11,7 @@ class AddOrderItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('waiter');
     }
 
     /**
@@ -22,7 +22,9 @@ class AddOrderItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'food_id' => 'required|exists:food,id',
+            'quantity' => 'required|integer|min:1',
+            'notes' => 'nullable|string|max:255',
         ];
     }
 }

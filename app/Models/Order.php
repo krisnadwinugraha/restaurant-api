@@ -13,23 +13,25 @@ class Order extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function table(): BelongsTo
-    {
+    protected $casts = [
+        'opened_at' => 'datetime',
+        'closed_at' => 'datetime',
+        'total_amount' => 'decimal:2',
+    ];
+
+    public function table(): BelongsTo {
         return $this->belongsTo(Table::class);
     }
 
-    public function waiter(): BelongsTo
-    {
+    public function waiter(): BelongsTo {
         return $this->belongsTo(User::class, 'waiter_id');
     }
 
-    public function cashier(): BelongsTo
-    {
+    public function closedBy(): BelongsTo {
         return $this->belongsTo(User::class, 'closed_by');
     }
 
-    public function items(): HasMany
-    {
+    public function items(): HasMany {
         return $this->hasMany(OrderItem::class);
     }
 }

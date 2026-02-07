@@ -11,7 +11,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()->hasRole('waiter');
     }
 
     /**
@@ -22,7 +22,16 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'table_id' => [
+                'required',
+                'exists:tables,id',
+                function ($attribute, $value, $fail) {
+                    $table = \App\Models\Table::find($value);
+                    if ($table && $table->status !== 'available') {
+                        $fail('This table is already occupied.');
+                    }
+                },
+            ],
         ];
     }
 }
