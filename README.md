@@ -2,16 +2,23 @@
 
 <img width="1895" height="882" alt="Screenshot 2026-02-10 203458" src="https://github.com/user-attachments/assets/1b192e8d-9bdc-4d69-b3d8-3e492bba6dbb" />
 
+
 The robust, decoupled backend for the Restaurant POS System. Built with Laravel 11 and MySQL, this API utilizes a Service Layer Architecture to handle complex business logic, atomic transactions, and strict Role-Based Access Control (RBAC).
 
 ## Tech Stack
 
 Framework: Laravel 11
+
 Language: PHP 8.2+
+
 Database: MySQL
+
 Authentication: Laravel Sanctum (SPA Auth)
+
 Permissions: Spatie Laravel Permission
+
 PDF Generation: Barryvdh DomPDF
+
 Architecture: Service Repository/Layer Pattern
 
 ## Key Features
@@ -42,7 +49,9 @@ Validation: Strict FormRequests for all inputs (e.g., negative quantity preventi
 Ensure you have the following installed:
 
 PHP: v8.2 or higher
+
 Composer: Latest version
+
 MySQL: Running and accessible
 
 ## Installation Guide
