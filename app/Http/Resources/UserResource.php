@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'roles' => $this->getRoleNames(), 
+            'role' => $this->getRoleNames(),
             'permissions' => $this->getAllPermissions()->pluck('name'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

@@ -8,6 +8,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\AddOrderItemRequest;
 use Illuminate\Http\Request;
+use App\Models\OrderItem;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -21,14 +22,17 @@ class OrderController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('auth:sanctum'),
-            new Middleware('role:waiter,api', only: ['store', 'addItem']),
-            new Middleware('role:cashier|waiter,api', only: ['close']),
+            new Middleware('role:waiter', only: ['store', 'addItem']),
+            new Middleware('role:cashier|waiter', only: ['close']),
         ];
     }
 
     public function index(Request $request)
     {
-        $orders = $this->orderService->getAllOrders($request->query('status'));
+       $status = $request->query('status');
+        $search = $request->query('search');
+
+        $orders = $this->orderService->getAllOrders($status, $search);
         return OrderResource::collection($orders);
     }
 
@@ -57,5 +61,35 @@ class OrderController extends Controller implements HasMiddleware
     {
         $updatedOrder = $this->orderService->closeOrder($order, $request->user()->id);
         return new OrderResource($updatedOrder);
+    }
+
+    public function updateItem(Request $request, Order $order, OrderItem $item)
+    {
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:1',
+            'notes' => 'nullable|string'
+        ]);
+
+        $this->orderService->updateOrderItem($order, $item, $validated);
+        
+        return new OrderResource($order->load('items.food'));
+    }
+
+    public function removeItem(Order $order, OrderItem $item)
+    {
+        $this->orderService->removeOrderItem($order, $item);
+        
+        return new OrderResource($order->load('items.food'));
+    }
+
+    public function downloadReceipt(Order $order)
+    {
+        if ($order->status !== 'closed') {
+            abort(403, "Receipt only available for closed orders.");
+        }
+
+        $pdf = $this->orderService->generateReceiptPdf($order);
+        
+        return $pdf->download("receipt-order-{$order->id}.pdf");
     }
 }
